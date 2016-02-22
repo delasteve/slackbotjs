@@ -1,0 +1,10 @@
+{
+  "name": "slackbot-demo",
+  "version": "0.0.0",
+  "description": "A demo project using slackbot",
+  "license": "MIT",
+  "private": "true",
+  "dependencies": {
+    "dotenv": "2.0.0"
+  }
+}

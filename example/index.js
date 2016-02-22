@@ -1,10 +1,5 @@
-const path = require(`path`);
-
 require(`babel-core/register`);
-require(`dotenv`).load({
-  path: path.join(__dirname, `.env`),
-  silent: false
-});
+require(`dotenv`).load({ silent: true });
 
 const SlackBot = require(`../lib/slackbot`).default;
 const slackbot = new SlackBot(process.env.SLACK_TOKEN);
