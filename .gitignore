@@ -4,3 +4,9 @@ example/.env
 
 # npm
 node_modules
+
+# log files
+*.log
+
+# nyc
+.nyc_output
