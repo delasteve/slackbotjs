@@ -15,6 +15,9 @@
     "type": "git",
     "url": "https://github.com/delasteve/slackbot.git"
   },
+  "scripts": {
+    "test": "./node_modules/.bin/eslint . && ./node_modules/.bin/mocha --recursive test/"
+  },
   "dependencies": {
     "slack": "6.0.0"
   },
