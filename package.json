@@ -1,0 +1,34 @@
+{
+  "name": "slackbot",
+  "version": "0.0.0",
+  "description": "A module for creating a SlackBot in Node",
+  "license": "MIT",
+  "author": {
+    "name" : "Stephen Cavaliere",
+    "email" : "stephencavaliere@gmail.com"
+  },
+  "homepage": "https://github.com/delasteve/slackbot",
+  "bugs": {
+    "url": "https://github.com/delasteve/slackbot/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/delasteve/slackbot.git"
+  },
+  "dependencies": {
+    "slack": "6.0.0"
+  },
+  "devDependencies": {
+    "babel-core": "6.5.2",
+    "babel-preset-es2015": "6.5.0",
+    "babel-eslint": "4.1.8",
+    "chai": "3.5.0",
+    "chai-as-promised": "5.2.0",
+    "dotenv": "2.0.0",
+    "eslint": "2.0.0",
+    "eslint-plugin-mocha": "2.0.0",
+    "mocha": "2.4.5",
+    "sinon": "1.17.3",
+    "sinon-chai": "2.8.0"
+  }
+}

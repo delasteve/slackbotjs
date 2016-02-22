@@ -1,0 +1,19 @@
+plugins:
+  - mocha
+
+env:
+  mocha: true
+
+globals:
+  expect: true
+  should: true
+  sinon: true
+
+rules:
+  max-nested-callbacks: 0
+  newline-per-chained-call: 0
+  no-new: 0
+  no-unused-expressions: 0
+  mocha/no-exclusive-tests: 2
+  mocha/handle-done-callback: 2
+  mocha/no-global-tests: 2
