@@ -16,7 +16,10 @@
     "url": "https://github.com/delasteve/slackbot.git"
   },
   "scripts": {
-    "test": "eslint . && mocha --recursive test/",
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "mocha --recursive test/",
+    "test-watch": "mocha -w --recursive test",
     "coverage": "nyc mocha test/ --recursive && nyc report --reporter=text-lcov | coveralls"
   },
   "dependencies": {
