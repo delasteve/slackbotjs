@@ -8,4 +8,4 @@
 
 ## Example
 
-An example bot can be found in the `example/`.
+An example bot can be found in the `example/` folder.
