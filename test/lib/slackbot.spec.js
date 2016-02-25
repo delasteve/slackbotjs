@@ -46,7 +46,7 @@ describe(`SlackBot`, () => {
     });
 
     describe(`#close`, () => {
-      it(`should close the RTM connection`, () => {
+      it(`closes the RTM connection`, () => {
         const closeStub = sandbox.stub(slackbot.slack, `close`);
 
         slackbot.end();
@@ -55,7 +55,7 @@ describe(`SlackBot`, () => {
       });
     });
 
-    describe(`#addHandler`, () => {
+    describe(`#on`, () => {
       it(`should add a handler to the specified event`, () => {
         const eventName = `customEvent`;
         const messageHandler = () => { return `foo`; };
@@ -63,10 +63,38 @@ describe(`SlackBot`, () => {
 
         slackbot.slack[eventName] = eventStub;
 
-        slackbot.addHandler(eventName, messageHandler);
+        slackbot.on(eventName, messageHandler);
 
         eventStub.should.be.calledOnce;
         eventStub.should.be.calledWithExactly(messageHandler);
+      });
+    });
+
+    describe(`#off`, () => {
+      const EVENT_NAME = `aMadeUpEvent`;
+
+      it(`removes a handler from the specified event`, () => {
+        const aFunc = () => { return `foo`; };
+
+        slackbot.slack.handlers[EVENT_NAME] = [aFunc];
+        slackbot.slack.handlers[EVENT_NAME].length.should.equal(1);
+
+        slackbot.off(EVENT_NAME, aFunc);
+
+        slackbot.slack.handlers[EVENT_NAME].length.should.equal(0);
+      });
+
+      it(`removes only the handler passed in`, () => {
+        const aFunc = () => { return `foo`; };
+        const aFunc2 = () => { return `bar`; };
+
+        slackbot.slack.handlers[EVENT_NAME] = [aFunc, aFunc2];
+        slackbot.slack.handlers[EVENT_NAME].length.should.equal(2);
+
+        slackbot.off(EVENT_NAME, aFunc);
+
+        slackbot.slack.handlers[EVENT_NAME].length.should.equal(1);
+        slackbot.slack.handlers[EVENT_NAME][0].should.equal(aFunc2);
       });
     });
   });

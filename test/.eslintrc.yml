@@ -12,6 +12,7 @@ globals:
 rules:
   max-nested-callbacks: 0
   newline-per-chained-call: 0
+  no-magic-numbers: 0
   no-new: 0
   no-unused-expressions: 0
   mocha/no-exclusive-tests: 2
