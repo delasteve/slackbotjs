@@ -4,7 +4,7 @@
 
 ## Installation
 
-`npm install slackbot`
+`npm install slackbotjs`
 
 ## Example
 
