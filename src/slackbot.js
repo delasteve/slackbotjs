@@ -30,6 +30,15 @@ class SlackBot {
       }
     }
   }
+
+  getChannelList() {
+    return new Promise((resolve, reject) => {
+      slack.channels.list({ token: this.token }, (error, data) => {
+        if (error) { return reject(error); }
+        return resolve(data.channels);
+      });
+    });
+  }
 }
 
-export default SlackBot;
+export { SlackBot };

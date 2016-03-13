@@ -1,4 +1,4 @@
-import SlackBot from '../../lib/slackbot';
+import { SlackBot } from '../../src/slackbot';
 import slack from 'slack';
 
 describe(`SlackBot`, () => {
@@ -45,7 +45,7 @@ describe(`SlackBot`, () => {
       });
     });
 
-    describe(`#close`, () => {
+    describe(`#end`, () => {
       it(`closes the RTM connection`, () => {
         const closeStub = sandbox.stub(slackbot.slack, `close`);
 
@@ -95,6 +95,36 @@ describe(`SlackBot`, () => {
 
         slackbot.slack.handlers[EVENT_NAME].length.should.equal(1);
         slackbot.slack.handlers[EVENT_NAME][0].should.equal(aFunc2);
+      });
+    });
+
+    describe(`#getChannelList`, () => {
+      it(`returns a resolved promise list of channels`, () => {
+        const response = { ok: true, channels: [{ id: `C024BE91L`, name: `foo` }] };
+        const channelsListStub = sandbox.stub(slack.channels, `list`);
+
+        const promise = slackbot.getChannelList();
+
+        channelsListStub.yield(null, response);
+
+        return Promise.all([
+          promise.should.be.fulfilled,
+          promise.should.eventually.equal(response.channels)
+        ]);
+      });
+
+      it(`returns a rejected promise on error`, () => {
+        const channelsListStub = sandbox.stub(slack.channels, `list`);
+        const invalidAuthError = new Error(`invalid_auth`);
+
+        const promise = slackbot.getChannelList();
+
+        channelsListStub.yield(invalidAuthError);
+
+        return Promise.all([
+          promise.should.be.rejected,
+          promise.should.be.rejectedWith(invalidAuthError)
+        ]);
       });
     });
   });
