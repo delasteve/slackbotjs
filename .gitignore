@@ -1,6 +1,6 @@
 # example files
-example/.env
-!example/.env.example
+examples/.env
+!examples/.env.example
 
 # npm
 node_modules
