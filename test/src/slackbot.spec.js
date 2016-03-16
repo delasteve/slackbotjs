@@ -99,13 +99,18 @@ describe(`SlackBot`, () => {
     });
 
     describe(`#getChannelList`, () => {
+      let channelListStub;
+
+      beforeEach(() => {
+        channelListStub = sandbox.stub(slack.channels, `list`);
+      });
+
       it(`returns a resolved promise list of channels`, () => {
-        const response = { ok: true, channels: [{ id: `C024BE91L`, name: `foo` }] };
-        const channelsListStub = sandbox.stub(slack.channels, `list`);
+        const response = { channels: [{ id: `C024BE91L`, name: `foo` }] };
 
         const promise = slackbot.getChannelList();
 
-        channelsListStub.yield(null, response);
+        channelListStub.yield(null, response);
 
         return Promise.all([
           promise.should.be.fulfilled,
@@ -114,12 +119,45 @@ describe(`SlackBot`, () => {
       });
 
       it(`returns a rejected promise on error`, () => {
-        const channelsListStub = sandbox.stub(slack.channels, `list`);
         const invalidAuthError = new Error(`invalid_auth`);
 
         const promise = slackbot.getChannelList();
 
-        channelsListStub.yield(invalidAuthError);
+        channelListStub.yield(invalidAuthError);
+
+        return Promise.all([
+          promise.should.be.rejected,
+          promise.should.be.rejectedWith(invalidAuthError)
+        ]);
+      });
+    });
+
+    describe(`#getUserList`, () => {
+      let userListStub;
+
+      beforeEach(() => {
+        userListStub = sandbox.stub(slack.users, `list`);
+      });
+
+      it(`returns a resolved promise list of users`, () => {
+        const response = { members: [{ id: `U023BECGF`, name: `bobby`, deleted: false }] };
+
+        const promise = slackbot.getUserList();
+
+        userListStub.yield(null, response);
+
+        return Promise.all([
+          promise.should.be.fulfilled,
+          promise.should.eventually.equal(response.members)
+        ]);
+      });
+
+      it(`returns a rejected promise on error`, () => {
+        const invalidAuthError = new Error(`invalid_auth`);
+
+        const promise = slackbot.getUserList();
+
+        userListStub.yield(invalidAuthError);
 
         return Promise.all([
           promise.should.be.rejected,

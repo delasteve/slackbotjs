@@ -7,6 +7,12 @@
     "name": "Stephen Cavaliere",
     "email": "stephencavaliere@gmail.com"
   },
+  "keywords": [
+    "slack",
+    "slackbot",
+    "bot",
+    "node-slackbot"
+  ],
   "homepage": "https://github.com/delasteve/slackbot",
   "bugs": {
     "url": "https://github.com/delasteve/slackbot/issues"
