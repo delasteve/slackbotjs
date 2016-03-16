@@ -39,6 +39,15 @@ class SlackBot {
       });
     });
   }
+
+  getUserList() {
+    return new Promise((resolve, reject) => {
+      slack.users.list({ token: this.token }, (error, data) => {
+        if (error) { return reject(error); }
+        return resolve(data.members);
+      });
+    });
+  }
 }
 
 export { SlackBot };
