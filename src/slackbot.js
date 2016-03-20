@@ -10,10 +10,14 @@ class SlackBot {
 
   start() {
     this.slack.listen({ token: this.token });
+
+    return Promise.resolve();
   }
 
   end() {
     this.slack.close();
+
+    return Promise.resolve();
   }
 
   on(rtmEvent, callback) {
@@ -29,6 +33,18 @@ class SlackBot {
         break;
       }
     }
+  }
+
+  postMessage(message) {
+    return new Promise((resolve, reject) => {
+      const defaultMessage = { token: this.token, as_user: true };
+      const updatedMessage = Object.assign({}, defaultMessage, message);
+
+      slack.chat.postMessage(updatedMessage, (error, data) => {
+        if (error) { return reject(error); }
+        return resolve(data);
+      });
+    });
   }
 
   getChannelList() {

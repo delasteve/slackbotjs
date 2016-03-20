@@ -13,13 +13,13 @@
     "bot",
     "node-slackbot"
   ],
-  "homepage": "https://github.com/delasteve/slackbot",
+  "homepage": "https://github.com/delasteve/slackbotjs",
   "bugs": {
-    "url": "https://github.com/delasteve/slackbot/issues"
+    "url": "https://github.com/delasteve/slackbotjs/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/delasteve/slackbot.git"
+    "url": "https://github.com/delasteve/slackbotjs.git"
   },
   "main": "lib/slackbot.js",
   "scripts": {
@@ -44,7 +44,7 @@
     "eslint": "2.4.0",
     "eslint-plugin-mocha": "2.0.0",
     "mocha": "2.4.5",
-    "nyc": "6.0.0",
+    "nyc": "6.1.1",
     "sinon": "1.17.3",
     "sinon-chai": "2.8.0"
   }

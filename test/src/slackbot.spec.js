@@ -35,23 +35,43 @@ describe(`SlackBot`, () => {
     });
 
     describe(`#start`, () => {
-      it(`opens a new RTM connection with the slack API token`, () => {
-        const listenStub = sandbox.stub(slackbot.slack, `listen`)
-          .withArgs({ token: SLACK_TOKEN });
+      let listenStub;
 
+      beforeEach(() => {
+        listenStub = sandbox.stub(slackbot.slack, `listen`)
+          .withArgs({ token: SLACK_TOKEN });
+      });
+
+      it(`opens a new RTM connection with the slack API token`, () => {
         slackbot.start();
 
         listenStub.should.be.calledOnce;
       });
+
+      it(`returns a promise on connect`, () => {
+        const promise = slackbot.start();
+
+        return promise.should.be.fullfilled;
+      });
     });
 
     describe(`#end`, () => {
-      it(`closes the RTM connection`, () => {
-        const closeStub = sandbox.stub(slackbot.slack, `close`);
+      let closeStub;
 
+      beforeEach(() => {
+        closeStub = sandbox.stub(slackbot.slack, `close`);
+      });
+
+      it(`closes the RTM connection`, () => {
         slackbot.end();
 
         closeStub.should.be.called;
+      });
+
+      it(`returns a promise on close`, () => {
+        const promise = slackbot.end();
+
+        return promise.should.be.fullfilled;
       });
     });
 
@@ -158,6 +178,61 @@ describe(`SlackBot`, () => {
         const promise = slackbot.getUserList();
 
         userListStub.yield(invalidAuthError);
+
+        return Promise.all([
+          promise.should.be.rejected,
+          promise.should.be.rejectedWith(invalidAuthError)
+        ]);
+      });
+    });
+
+    describe(`#postMessage`, () => {
+      let postMessageStub;
+
+      beforeEach(() => {
+        postMessageStub = sandbox.stub(slack.chat, `postMessage`);
+      });
+
+      it(`appends token to message by default`, () => {
+        slackbot.postMessage();
+
+        postMessageStub.should.be.calledOnce;
+        postMessageStub.getCall(0).args[0].should.have.property(`token`, SLACK_TOKEN);
+      });
+
+      it(`appends { as_user: true } to message by default`, () => {
+        slackbot.postMessage();
+
+        postMessageStub.should.be.calledOnce;
+        postMessageStub.getCall(0).args[0].should.have.property(`as_user`, true);
+      });
+
+      it(`respects as_user if present`, () => {
+        slackbot.postMessage({ as_user: `fooValue` });
+
+        postMessageStub.should.be.calledOnce;
+        postMessageStub.getCall(0).args[0].should.have.property(`as_user`, `fooValue`);
+      });
+
+      it(`returns a resolved promise on successful post`, () => {
+        const response = { ts: `1405895017.000506`, channel: `C024BE91L`, message: {} };
+
+        const promise = slackbot.postMessage();
+
+        postMessageStub.yield(null, response);
+
+        return Promise.all([
+          promise.should.be.fulfilled,
+          promise.should.eventually.equal(response)
+        ]);
+      });
+
+      it(`returns a rejected promise on error`, () => {
+        const invalidAuthError = new Error(`invalid_auth`);
+
+        const promise = slackbot.postMessage();
+
+        postMessageStub.yield(invalidAuthError);
 
         return Promise.all([
           promise.should.be.rejected,
