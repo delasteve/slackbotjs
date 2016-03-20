@@ -1,11 +1,35 @@
-const SlackBot = require(`..`).SlackBot;
-const path = require(`path`);
+import { SlackBot } from '..';
+import dotenv from 'dotenv';
+import path from 'path';
 
-require(`dotenv`).load({
+dotenv.load({
   path: path.join(__dirname, `.env`),
   silent: true
 });
 
 const slackbot = new SlackBot(process.env.SLACK_TOKEN);
 
-slackbot.start();
+let me;
+
+slackbot.start()
+  .then(() => { return slackbot.getUserList(); })
+  .then((users) => { me = users.find((user) => { return user.name === `stephen.cavaliere`; }); })
+  .then(() => {
+    slackbot.postMessage({
+      channel: me.id,
+      text: `I have connected!`
+    });
+  });
+
+slackbot.on(`message`, (payload) => {
+  if (payload.text === `turn off`) {
+    slackbot
+      .end()
+      .then(() => {
+        slackbot.postMessage({
+          channel: me.id,
+          text: `Good bye!`
+        });
+      });
+  }
+});
